@@ -58,14 +58,14 @@ class Ball:
         if self.posy <= 0 or self.posy >= HEIGHT:
             self.yFac *= -1
 
-        # Bounce horizontally
-        if self.posx <= 0 and self.firstTime:
-            self.firstTime = 0
-            return 1
-        elif self.posx >= WIDTH and self.firstTime:
-            self.firstTime = 0
-            return -1
-        return 0
+        # Bounce horizontally (dont work right now)
+#        if self.posx <= 0 and self.firstTime:
+#            self.firstTime = 0
+#            return 1
+#        elif self.posx >= WIDTH and self.firstTime:
+#            self.firstTime = 0
+#            return -1
+#        return 0
 
     def reset(self):
         self.posx = WIDTH // 2
@@ -100,8 +100,21 @@ while running:
     ball.update()
     ball.draw(scr)
 
-    # Draw other stuff (example brick)
-    scr.blit(rectangle_img, (200, 300))
+    # Draw other stuff (example brick)     ((BRIK HEIGHT 30PX ====== BRIK WIDTH 63PX))
+    brik1 = scr.blit(rectangle_img, (50, 50))
+    brik5 = scr.blit(rectangle_img, (113, 50))
+    brik6 = scr.blit(rectangle_img, (176, 50))
+    brik7 = scr.blit(rectangle_img, (239, 50))
+
+
+    brik2 = scr.blit(rectangle_img, (50, 80))
+
+
+    brik3 = scr.blit(rectangle_img, (50, 110))
+
+
+    brik4 = scr.blit(rectangle_img, (50, 140))
+
 
     pygame.display.update()
 
