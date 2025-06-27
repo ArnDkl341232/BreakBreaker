@@ -58,13 +58,12 @@ class Ball:
         self.image = ball_img
         self.rect = self.image.get_rect(center=(x, y))
         self.speed = speed
-        self.vx = 0  # Initialize velocities
+        self.vx = 0
         self.vy = 0
         self.active = True
         self.reset_position(x, y)
 
     def reset_position(self, x, y):
-        # Called only on initial spawn
         self.rect.center = (x, y)
         angle = random.uniform(-0.5, 0.5)  # slight horizontal angle in radians
         self.vx = self.speed * math.sin(angle)
@@ -137,6 +136,14 @@ while running:
     lives_text = font2.render(f"Lives: {lives}", True, 	(0,255,255))
     scr.blit(lives_text, (10, 10))
 
+#reset button
+    keys = pygame.key.get_pressed()
+    if game_over and keys[pygame.K_r]:
+        lives = 3
+        brick_rects = brick_generation()
+        game_over = False
+        pygame.display.flip()
+
     #brik breaking
     if ball.active:
         for rect in brick_rects[:]:
@@ -164,10 +171,10 @@ while running:
         scr.blit(lose, text_rect2)
         game_over = True
 
+
     else:
         for rect in brick_rects:
             scr.blit(rectangle_img, rect.topleft)
-
     pygame.display.flip()
-
+pygame.display.flip()
 pygame.quit()
