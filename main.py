@@ -13,6 +13,7 @@ font2 = pygame.font.SysFont(None, 32)
 FPS = 60
 lives = 3
 game_over = False
+win_time = None
 
 
 #assets
@@ -29,7 +30,7 @@ bg = pygame.transform.scale(bg, (800, 600))
 # Generate brick
 def brick_generation():
     bricks = []
-    rows, cols = 4, 11
+    rows, cols = 4,11
     x0, y0 = 50, 50
     w = rectangle_img.get_width()
     h = rectangle_img.get_height()
@@ -158,15 +159,23 @@ while running:
 
     # Drawing bricks
     if not brick_rects:
-        win = font.render("YOU WIN!", True, (255, 255, 0))
-        scr.blit(win, win.get_rect(center=(400, 300)))
-        ball.active = False
-        ball.rect.centerx = paddle.rect.centerx
-        ball.rect.bottom = paddle.rect.top
-        ball.speed += 2
-        ball.reset_position(ball.rect.centerx, ball.rect.centery)
-        paddle.speed += 1
-        brick_rects = brick_generation()
+        if win_time is None:
+            win_time = pygame.time.get_ticks()
+            win = font.render("YOU WIN!", True, (255, 255, 0))
+            win_rect = win.get_rect(center=(400, 300))
+            ball.active = False
+
+        scr.blit(win, win_rect)
+
+        # Checking if 3 seconds have passed
+        if pygame.time.get_ticks() - win_time > 3000:
+            win_time = None
+            ball.rect.centerx = paddle.rect.centerx
+            ball.rect.bottom = paddle.rect.top
+            ball.speed += 2
+            ball.reset_position(ball.rect.centerx, ball.rect.centery)
+            paddle.speed += 1
+            brick_rects = brick_generation()
 
     if lives == 0 or lives < 0:
         lose = font.render("YOU LOSE!", True, (255, 0, 0))
