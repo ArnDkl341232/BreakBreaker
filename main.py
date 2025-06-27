@@ -99,7 +99,7 @@ class Ball:
 
 
 #Our configs of game
-paddle = Paddle( (800 - paddle_img.get_width())//2, 550, speed=20 )
+paddle = Paddle( (800 - paddle_img.get_width())//2, 550, speed=8 ) #for first level will be 6ball and 8 for padle
 ball   = Ball(400, 300, speed=10)
 
 
@@ -130,8 +130,15 @@ while running:
                 break
 
     # Draw bricks
-    for rect in brick_rects:
-        scr.blit(rectangle_img, rect.topleft)
+    if not brick_rects:
+        win_text = font.render("YOU WIN!", True, (255, 255, 0))
+        text_rect = win_text.get_rect(center=(400, 300))
+        scr.blit(win_text, text_rect)
+        # Stop ball and paddle
+        ball.active = False
+    else:
+        for rect in brick_rects:
+            scr.blit(rectangle_img, rect.topleft)
 
     pygame.display.flip()
 
