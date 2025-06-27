@@ -21,7 +21,8 @@ rectangle_img = pygame.image.load('assets/images/rectangle.png')
 touched_bar_sound   = pygame.mixer.Sound('assets/sounds/touched_bar.mp3')
 touched_brick_sound = pygame.mixer.Sound('assets/sounds/touched_brick.mp3')
 
-# Generate brick
+# Generate brick   ###nearly finish new level system but it isnt work
+#def brick_generation():
 brick_rects = []
 rows, cols = 4, 11
 x0, y0 = 50, 50
@@ -106,7 +107,7 @@ class Ball:
 
 #Our configs of game
 paddle = Paddle( (800 - paddle_img.get_width())//2, 550, speed=8 ) #for first level will be 6ball and 8 for padle
-ball   = Ball(400, 300, speed=10)
+ball   = Ball(400, 300, speed=7)
 
 
 running = True
@@ -141,13 +142,22 @@ while running:
                 break
 
     # Drawing bricks
-    if not brick_rects:
+    if not brick_rects: #and lives == 1:
         win = font.render("YOU WIN!", True, (255, 255, 0))
         text_rect = win.get_rect(center=(400, 300))
         scr.blit(win, text_rect)
         ball.active = False
+        ball.speed += 5
+        paddle.speed += 5
+        brick_generation()
+        ball.reset_position(400, 300)
+        ball.active = False
+        paddle.rect.x = (800 - paddle_img.get_width()) // 2
+
+
+
     if lives == 0 or lives < 0:
-        lose = font.render("YOU LOSE!", True, (0, 255, 0))
+        lose = font.render("YOU LOSE!", True, (255, 0, 0))
         text_rect2 = lose.get_rect(center=(400, 300))
         scr.blit(lose, text_rect2)
         game_over = True
