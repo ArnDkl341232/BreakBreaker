@@ -22,7 +22,7 @@ rectangle_img = pygame.image.load('assets/images/rectangle.png').convert_alpha()
 touched_bar_sound   = pygame.mixer.Sound('assets/sounds/touched_bar.mp3')
 touched_brick_sound = pygame.mixer.Sound('assets/sounds/touched_brick.mp3')
 
-
+bg = pygame.transform.scale(bg, (800, 600))
 
 # Generate brick
 def brick_generation():
