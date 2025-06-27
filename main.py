@@ -11,28 +11,32 @@ FPS = 60
 lives = 3
 game_over = False
 
+#brick_rects = []
 
 #assets
 bg = pygame.image.load("./assets/images/bg.png")
 ball_img = pygame.image.load('assets/images/ball.png')
 paddle_img = pygame.image.load('assets/images/paddle.png')
 
-rectangle_img = pygame.image.load('assets/images/rectangle.png')
+rectangle_img = pygame.image.load('assets/images/rectangle.png').convert_alpha()
 touched_bar_sound   = pygame.mixer.Sound('assets/sounds/touched_bar.mp3')
 touched_brick_sound = pygame.mixer.Sound('assets/sounds/touched_brick.mp3')
 
-# Generate brick   ###nearly finish new level system but it isnt work
-#def brick_generation():
-brick_rects = []
-rows, cols = 4, 11
-x0, y0 = 50, 50
-x_placing = rectangle_img.get_width()
-y_placing = rectangle_img.get_height()
-for row in range(rows):
-    for col in range(cols):
-        x = x0 + col * x_placing
-        y = y0 + row * y_placing
-        brick_rects.append(rectangle_img.get_rect(topleft=(x, y)))
+
+
+# Generate brick
+def brick_generation():
+    bricks = []
+    rows, cols = 4, 11
+    x0, y0 = 50, 50
+    w = rectangle_img.get_width()
+    h = rectangle_img.get_height()
+    for row in range(rows):
+        for col in range(cols):
+            x = x0 + col * w
+            y = y0 + row * h
+            bricks.append(rectangle_img.get_rect(topleft=(x, y)))
+    return bricks
 
 # Paddle
 class Paddle:
@@ -106,9 +110,9 @@ class Ball:
 
 
 #Our configs of game
-paddle = Paddle( (800 - paddle_img.get_width())//2, 550, speed=8 ) #for first level will be 6ball and 8 for padle
-ball   = Ball(400, 300, speed=7)
-
+paddle = Paddle( (800 - paddle_img.get_width())//2, 550, speed= 7) #for first level will be 6ball and 8 for padle
+ball   = Ball(400, 300, speed= 5)
+brick_rects = brick_generation()
 
 running = True
 while running:
@@ -142,19 +146,16 @@ while running:
                 break
 
     # Drawing bricks
-    if not brick_rects: #and lives == 1:
+    if not brick_rects:
         win = font.render("YOU WIN!", True, (255, 255, 0))
-        text_rect = win.get_rect(center=(400, 300))
-        scr.blit(win, text_rect)
+        scr.blit(win, win.get_rect(center=(400, 300)))
         ball.active = False
-        ball.speed += 5
-        paddle.speed += 5
-        brick_generation()
-        ball.reset_position(400, 300)
-        ball.active = False
-        paddle.rect.x = (800 - paddle_img.get_width()) // 2
-
-
+        ball.rect.centerx = paddle.rect.centerx
+        ball.rect.bottom = paddle.rect.top
+        ball.speed += 2
+        ball.reset_position(ball.rect.centerx, ball.rect.centery)
+        paddle.speed += 1
+        brick_rects = brick_generation()
 
     if lives == 0 or lives < 0:
         lose = font.render("YOU LOSE!", True, (255, 0, 0))
