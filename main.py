@@ -1,3 +1,5 @@
+from time import sleep
+
 import pygame
 import random
 import math
@@ -12,7 +14,6 @@ FPS = 60
 lives = 3
 game_over = False
 
-#brick_rects = []
 
 #assets
 bg = pygame.image.load("./assets/images/bg.png")
@@ -117,6 +118,7 @@ brick_rects = brick_generation()
 running = True
 while running:
     clock.tick(FPS)
+    n_time = pygame.time.get_ticks()
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
@@ -138,8 +140,9 @@ while running:
 
 #reset button
     keys = pygame.key.get_pressed()
-    if game_over and keys[pygame.K_r]:
+    if keys[pygame.K_r]:
         lives = 3
+
         brick_rects = brick_generation()
         game_over = False
         pygame.display.flip()
