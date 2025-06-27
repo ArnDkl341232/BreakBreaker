@@ -4,6 +4,7 @@ import math
 
 pygame.init()
 scr = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Break Breaker")
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 72)
 font2 = pygame.font.SysFont(None, 32)
