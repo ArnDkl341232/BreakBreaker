@@ -41,8 +41,8 @@ class Paddle:
         self.speed = speed
     def move(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]  and self.rect.left  > 0:       self.rect.x -= self.speed
-        if keys[pygame.K_RIGHT] and self.rect.right < 800:     self.rect.x += self.speed
+        if keys[pygame.K_LEFT]  and self.rect.left > 0  and not game_over:       self.rect.x -= self.speed
+        if keys[pygame.K_RIGHT] and self.rect.right < 800 and not game_over:     self.rect.x += self.speed
     def draw(self):
         scr.blit(self.image, self.rect.topleft)
 
@@ -140,7 +140,7 @@ while running:
                 ball.vy *= -1
                 break
 
-    # Draw bricks
+    # Drawing bricks
     if not brick_rects:
         win = font.render("YOU WIN!", True, (255, 255, 0))
         text_rect = win.get_rect(center=(400, 300))
@@ -150,6 +150,7 @@ while running:
         lose = font.render("YOU LOSE!", True, (0, 255, 0))
         text_rect2 = lose.get_rect(center=(400, 300))
         scr.blit(lose, text_rect2)
+        game_over = True
 
     else:
         for rect in brick_rects:
