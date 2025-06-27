@@ -6,7 +6,11 @@ pygame.init()
 scr = pygame.display.set_mode((800, 600))
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None, 72)
+font2 = pygame.font.SysFont(None, 32)
 FPS = 60
+lives = 3
+game_over = False
+
 
 #assets
 bg = pygame.image.load("./assets/images/bg.png")
@@ -61,6 +65,8 @@ class Ball:
         self.vy = -self.speed * math.cos(angle)
 
     def reset(self, paddle):
+        global lives
+        lives -= 1
         self.rect.center = (paddle.rect.centerx, paddle.rect.top - self.rect.height)
         self.active = False
         angle = random.uniform(-0.5, 0.5)
@@ -106,13 +112,15 @@ ball   = Ball(400, 300, speed=10)
 running = True
 while running:
     clock.tick(FPS)
-
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
-        if e.type == pygame.KEYDOWN:
+        if e.type == pygame.KEYDOWN and not game_over:
             if e.key == pygame.K_SPACE and not ball.active:
                 ball.active = True
+    if not game_over:
+        paddle.move()
+        ball.update(paddle)
 
     scr.blit(bg, (0, 0))
     paddle.move()
@@ -120,7 +128,10 @@ while running:
     ball.update(paddle)
     ball.draw()
 
-#brik breaking
+    lives_text = font2.render(f"Lives: {lives}", True, 	(0,255,255))
+    scr.blit(lives_text, (10, 10))
+
+    #brik breaking
     if ball.active:
         for rect in brick_rects[:]:
             if ball.rect.colliderect(rect):
@@ -131,11 +142,15 @@ while running:
 
     # Draw bricks
     if not brick_rects:
-        win_text = font.render("YOU WIN!", True, (255, 255, 0))
-        text_rect = win_text.get_rect(center=(400, 300))
-        scr.blit(win_text, text_rect)
-        # Stop ball and paddle
+        win = font.render("YOU WIN!", True, (255, 255, 0))
+        text_rect = win.get_rect(center=(400, 300))
+        scr.blit(win, text_rect)
         ball.active = False
+    if lives == 0 or lives < 0:
+        lose = font.render("YOU LOSE!", True, (0, 255, 0))
+        text_rect2 = lose.get_rect(center=(400, 300))
+        scr.blit(lose, text_rect2)
+
     else:
         for rect in brick_rects:
             scr.blit(rectangle_img, rect.topleft)
